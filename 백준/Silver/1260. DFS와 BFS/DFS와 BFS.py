@@ -19,47 +19,50 @@ BFS 탐색 결과
 '''
 from collections import deque
 import sys
-
 input = sys.stdin.readline
 
-# 입력
-N, M, S = map(int, input().split())
+
+N, M, V = map(int, input().split())
+
 graph = [[False] * (N+1) for _ in range(N+1)]
+v_dfs = [False] * (N+1)
+v_bfs = [False] * (N+1)
 
 for _ in range(M):
     s, e = map(int, input().split())
     graph[s][e] = True
     graph[e][s] = True
 
-# 방문여부
-visited_dfs = [False for _ in range(N+1)]
-visited_bfs = [False for _ in range(N+1)]
+#for i in range(N+1):
+    #print(graph[i])
 
-def bfs(S):
-    # 탐색
+def bfs(V):
     q = deque()
-    q.append(S)
-    visited_bfs[S] = True
+    q.append(V)
+    v_bfs[V] = True
 
     while q:
-        cur_node = q.popleft()
-        print(cur_node, end=" ")
-        for i in range(1, N+1):
-            if not visited_bfs[i] and graph[cur_node][i]: # if문에서 찾아도 너비탐색이기 때문에 계속 for문 돌아감(주위에 있는거 다 찾기)
-                visited_bfs[i] = True
+        # deque에 append 시 오른쪽이 입구임
+        # 1부터 3까지 append 시 (1,2,3) 됨
+        # q.pop() = 3
+        # q.popleft() = 1 # 그래서 bfs가 가능
+        cur = q.popleft()
+        print(cur, end=" ")
+        for i in range(1,N+1):
+            if not v_bfs[i] and graph[cur][i]: # if문에서 찾아도 너비탐색이기 때문에 계속 for문 돌아감(주위에 있는거 다 찾기)
                 q.append(i)
+                v_bfs[i] = True
 
-def dfs(S):
-    visited_dfs[S] = True
-    print(S, end=" ")
+def dfs(V):
+    v_dfs[V] = True
+    print(V, end=" ")
     for i in range(1, N+1):
-        if not visited_dfs[i] and graph[S][i]: # if문에서 찾아버리면 깊이 탐색해야 하기 때문에 dfs로 다시 가기 (계속 안으로 들어가기)
+        if not v_dfs[i] and graph[V][i]: # if문에서 찾아버리면 깊이 탐색해야 하기 때문에 dfs로 다시 가기 (계속 안으로 들어가기)
+            v_dfs[i] = True
             dfs(i)
-
-dfs(S)
+dfs(V)
 print()
-bfs(S)
-
+bfs(V)
 
 
 
