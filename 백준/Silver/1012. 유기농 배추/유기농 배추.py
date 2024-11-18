@@ -8,7 +8,7 @@ sys.setrecursionlimit(100000)
 
 T = int(input().rstrip())
 
-def bfs(x,y):
+def dfs(x,y):
     dx = [-1, 1, 0, 0]
     dy = [0, 0, -1, 1]
     size = 1
@@ -39,7 +39,7 @@ for _ in range(T):
     for i in range(N):
         for j in range(M):
             if not visited[i][j] and graph[i][j] == 1:
-                warms.append(bfs(i,j))
+                warms.append(dfs(i,j))
 
     ans.append(len(warms))
 
