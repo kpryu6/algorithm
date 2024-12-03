@@ -1,50 +1,50 @@
 '''
-1. 삭제된 노드의 부모 노드가 새로운 리프 노드가 될 가능성 고려하기
-2. 삭제 시 자손까지 삭제하는 로직 구현 필요
-3. 부모가 -1인 노드를 0으로 고정 X
+노드 삭제
+1. 해당 노드 부터 자식까지 모두 삭제
+2. 부모가 해당 노드 연결 삭제
 
-재귀+ 트리 문제
 '''
 import sys
 from collections import defaultdict
 input = sys.stdin.readline
 
+tree = defaultdict(list)
+root = -1
+
 N = int(input().rstrip())
 parents = list(map(int, input().rstrip().split()))
 dn = int(input().rstrip())
-root = -1
-tree = defaultdict(list)
 
-# 부모 : 자식들 로 표현
-for child, parent in enumerate(parents):
+# tree에 저장
+for node, parent in enumerate(parents):
     if parent == -1:
-        root = child
+        root = node
     else:
-        tree[parent].append(child)
+        tree[parent].append(node)
 
-# print(tree)
-
-# 부모노드에서 해당 노드 제거 + 자식부터 자신까지 삭제
+# 노드 삭제 로직
 def delete_node(node):
-    # 부모노드에서 이 node 제거
+    # 부모가 해당 노드 연걸 삭제
     for parent, children in tree.items():
         if node in children:
             children.remove(node)
-    # child 삭제
+    # 재귀적으로 자식까지 삭제
     for child in tree[node]:
         delete_node(child)
-    # node 삭제
+
     tree.pop(node)
 
+# leaf 노드 count 로직
 def count_leaf(node):
+    # node가 leaf면
     if len(tree[node]) == 0:
         return 1
-
     count = 0
+    # node의 자식이 leaf일 수 있음(재귀)
     for child in tree[node]:
         count += count_leaf(child)
-    return count
 
+    return count
 
 if dn == root:
     print(0)
