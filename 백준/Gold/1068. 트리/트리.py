@@ -1,53 +1,26 @@
-'''
-노드 삭제
-1. 해당 노드 부터 자식까지 모두 삭제
-2. 부모가 해당 노드 연결 삭제
-
-'''
 import sys
-from collections import defaultdict
 input = sys.stdin.readline
 
-tree = defaultdict(list)
-root = -1
+
+def dfs(del_node, parents):
+    # 부모를 제거하는게 아니라 del_node를 트리에서 자르는 과정(부모를 -10으로 바꾸는거임)
+    parents[del_node] = -10 # 의미없는 숫자를 부여해 제거함을 의미
+    for i in range(N):
+        # del_node를 부모로 가지고 있는 애들 모두 떨어뜨리기
+        if del_node == parents[i]:
+            dfs(i,parents)
 
 N = int(input().rstrip())
 parents = list(map(int, input().rstrip().split()))
 dn = int(input().rstrip())
 
-# tree에 저장
-for node, parent in enumerate(parents):
-    if parent == -1:
-        root = node
-    else:
-        tree[parent].append(node)
+dfs(dn,parents)
+count = 0
 
-# 노드 삭제 로직
-def delete_node(node):
-    # 부모가 해당 노드 연걸 삭제
-    for parent, children in tree.items():
-        if node in children:
-            children.remove(node)
-    # 재귀적으로 자식까지 삭제
-    for child in tree[node]:
-        delete_node(child)
+for i in range(N):
+    # 제거된 노드도 아니고, i가 특정 노드의 부모가 아니면
+    if parents[i] != -10 and i not in parents:
+        count += 1
 
-    tree.pop(node)
+print(count)
 
-# leaf 노드 count 로직
-def count_leaf(node):
-    # node가 leaf면
-    if len(tree[node]) == 0:
-        return 1
-    count = 0
-    # node의 자식이 leaf일 수 있음(재귀)
-    for child in tree[node]:
-        count += count_leaf(child)
-
-    return count
-
-if dn == root:
-    print(0)
-else:
-    delete_node(dn)
-    print(count_leaf(root))
