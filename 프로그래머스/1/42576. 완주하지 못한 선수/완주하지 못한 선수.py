@@ -1,10 +1,25 @@
 
-from collections import Counter
-
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
 def solution(participant, completion):
-    counter_part = Counter(participant)
-    counter_comp = Counter(completion)
-    
-    answer = counter_part - counter_comp
-    
-    return list(answer.keys())[0]
+    answer = ''
+    temp = 0
+    dic = {}
+    for part in participant:
+        dic[hash(part)] = part
+        temp += int(hash(part))
+    for com in completion:
+        temp -= hash(com)
+    answer = dic[temp]
+
+    return answer
