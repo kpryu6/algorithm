@@ -75,3 +75,56 @@
 
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://school.programmers.co.kr/learn/challenges
+
+---
+# 문제 풀이
+
+## 완주하지 못한 선수 1
+**Sort**
+- 정렬(O(nlogn))과 순차적 비교(O(n))를 통해 구현
+
+</br>
+
+## 완주하지 못한 선수 2
+**Counter**
+- 각 이름의 등장 횟수를 셈 (O(n))
+```python3
+from collections import Counter
+
+p = Counter(participant)
+# Counter({'mislav': 2, 'stanko': 1, 'ana': 1})
+c = Counter(completion)
+# Counter({'stanko': 1, 'ana': 1, 'mislav': 1})
+
+diff = p - c
+# Counter({'mislav': 1})
+```
+</br>
+
+## 완주하지 못한 선수 3
+**Hash**
+- 객체(주로 문자열)에 대해 해시 값을 정수로 반환
+- 동일 객체 -> 동일 해시 값
+- 참여자들의 이름으로 해시 값을 구해 단 한명의 완주하지 못한 선수의 해시 값을 가감을 이용해 구할 수 있음
+
+</br>
+
+## 완주하지 못한 선수 4
+
+**zip**
+- 여러 개의 이터러블(iterable) 객체(예: 리스트, 튜플, 문자열 등)를 동시에 순회할 수 있게 해주는 내장 함수
+- 각 요소를 순서대로 묶어 **튜플** 형태로 반환
+- 두 리스트의 같은 인덱스에 있는 요소들을 한쌍으로 묶음
+```python3
+fruits = ["apple", "banana", "cherry", "pineapple"]
+colors = ["red", "yellow", "dark red"]
+
+zipped = zip(fruits, colors)
+print(list(zipped))
+# 출력: [('apple', 'red'), ('banana', 'yellow'), ('cherry', 'dark red')]
+```
+- 가장 짧은 이터러블의 길이에 맞춰 순회 멈춤
+- 반환값은 iterator
+  - 필요에 따라 리스트나 튜플로 변환시키기
+
+</br>
