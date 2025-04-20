@@ -14,7 +14,7 @@ def solution(phone_book):
         for num in phone_number:
             temp += num
             # temp가 hash_map에 있으면서 동시에 phone_number가 아니여야 함
-            # ex) phone_number = 119, temp = 1195566
+            # ex) phone_number = 1195566, temp = 119
             if temp in hash_map and temp != phone_number:
                 answer = False
     
