@@ -1,17 +1,15 @@
-'''
-
-'''
 def solution(clothes):
-    answer = 1
-    from collections import Counter
-    c = Counter()
-    for cloth in clothes:
-        c[cloth[1]] += 1
+    clothes_type = {}
+    cnt = 1
     
-    c_list = list(c.values())
-    for i in range(len(c_list)):
-        answer *= c_list[i]+1
-    return answer -1
+    for c,t in clothes:
+        if t not in clothes_type:
+            clothes_type[t] = 2
+        else:
+            clothes_type[t] += 1
+    
+    for n in clothes_type.values():
+        cnt *= n
+    
+    return cnt - 1
         
-    
-    
