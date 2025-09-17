@@ -1,45 +1,56 @@
 '''
-모든 트럭이 다리 건너는 시간
-정해진 순서로 거너야함
+트럭이 다리 지남(일차선)
+모두 다 건너려면 몇초?
+다리 ____ -> 4대까지 올라감 - bridge_length
+최대 weight 무게까지
 
-트럭 2대가 올라갈수있으니까 2칸으로 봤네 1칸당 1초
--> 그니까 2번째 입출력 예가 101임
+예
+__ - 10kg
 
-다리 지탱 개수 = bridge_length
-다리 지탱 무게 = weight
+지난 트럭으로 while 잡았는데 그럼 문제가있음
+너무복잡함
 
-빈 것이 아니라 길이만큼 다리를 만들어주고 시작해야됨
-
+시간   지난 트럭     지나고있는트럭(10kg)     대기
+0      []          __                 [7,4,5,6]
+1      []          _7                 [4,5,6]
+2      []          7_                 [4,5,6]
+3      [7]         _4                 [5,6]
+4      [7]         45                 [6]
+5      [7,4]       5_                 [6]    
+6      [7,4,5]     _6                 []
+7      [7,4,5]     6_                 []
+8      [7,4,5,6]   __                 []
 '''
+from collections import deque
+
 def solution(bridge_length, weight, truck_weights):
-    from collections import deque
+    answer = 0
+    on_bridge = deque([0]*bridge_length)
+    trucks = deque(truck_weights)
     
-    # 다리 위
-    on_bridge = deque([0] * bridge_length)
-    # 대기트럭
-    truck_weights = deque(truck_weights)
+    print(on_bridge)
+    print(trucks)
     
-    time = 0
-    total_weights = 0
+    bridge_weight = 0
     
     while on_bridge:
         
-        time += 1
-        left_truck = on_bridge.popleft()
-        total_weights -= left_truck
+        answer += 1
+        # 다리에 있는거 빼
+        finish = on_bridge.popleft()
+        bridge_weight -= finish
         
-        if truck_weights:
-            if truck_weights[0] + total_weights <= weight:
-                # 대기트럭에서 뽑고
-                truck = truck_weights.popleft()
-                # on_bridge에 넣기
+        # 다리에 truck 넣어
+        if trucks:
+            if trucks[0] + bridge_weight <= weight:
+                truck = trucks.popleft()
                 on_bridge.append(truck)
-                total_weights += truck
+                bridge_weight += truck
             else:
+                # 다리에 있는 트럭 왼쪽으로 밀기
                 on_bridge.append(0)
-        
-        # print(on_bridge)
-    return time
-        
-        
-    
+            
+    return answer
+
+
+
