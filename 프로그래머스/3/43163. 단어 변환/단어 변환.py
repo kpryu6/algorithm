@@ -1,70 +1,44 @@
 '''
-begin -> target
-한번에 1개의 알파벳만 변경
-words 돌면서 해야됨 -> BFS 해야됨 최단거리라서
+begin에서 target으로 가는데
+words에 target이 있다아임니까
 
-# 이거 아니에요
-O(n^2) ??
-hit에서 처음에 싹 봐야되는건가 그럼 갈 수 있는거들 인덱스에 +시간
-시간 1 [1,0,0,0,0,0] -> hot -> [dot dog lot log cog]
-시간 2 [1,2,0,2,0,0] -> dot lot [dog lot log cog]
-시간 3 [1,3,3,3,0,0] -> dot lot dog [lot log cog]
-시간 4 [4,4,4,4,4,4] -> 싹 됨 cog면 return
+words 싹 뒤지면서 
+begin이랑 비교하면서
+words에 있는 애들 거리 추가해서 ㄱㄱ (dog, 4) 요런식으로
 
-while 
-
-if begin not in target:
-    return 0
-    
-for x in words:
-    if 1개의 단어만 다른지:
-        begin = x
-        cnt += 1
-    else:
-        continue
 
 '''
-
-# 단어 2개(x,y) 비교해서 문자 하나만 다른지 찾는 함수
-def isdiff_one(x,y):
-        x = list(x)
-        y = list(y)
-        cnt = 0
-        
-        for i in range(len(x)):
-            if x[i] != y[i]:
-                cnt += 1
-                
-        if cnt == 1:
-            return True
-        
-        return False
-
 from collections import deque
 
-def solution(begin, target, words):
+# cur이랑 하나만 다른애들 yield
+def get_adjacent(cur,words):
+    
+    # 음 이거 O(n^2)이라 별로인것같은데; 그치
+    for word in words:
+        cnt = 0
+        for c,w in zip(cur,word):
+            if c != w:
+                cnt += 1
         
+        if cnt == 1:
+            yield word
+    
+def solution(begin, target, words):
+    # 예외처리1
     if target not in words:
         return 0
     
-    Q = deque([(begin,0)])
-    # 이건 미쳤다
-    visited = {begin}
-
+    Q = deque([begin])
+    dist = {begin: 0}
+    
     while Q:
-        cur, cnt = Q.popleft()
+        cur = Q.popleft()
         
-        if cur == target:
-            return cnt
-        
-        for nxt in words:
-            # 다음 단어로 넘어가기
-            if nxt not in visited and isdiff_one(cur,nxt):
-                visited.add(nxt)
-                Q.append([nxt,cnt+1])
-        
-        print("visited= ", visited)
-        print("Q= ", Q)
-    return 0
-        
-    return cnt
+        # 뽑은거랑 조건에 맞는 next_word랑 비교해야지
+        for next_word in get_adjacent(cur,words):
+            if next_word not in dist:
+                dist[next_word] = dist[cur] + 1
+                Q.append(next_word)
+    
+    return dist.get(target,0)
+            
