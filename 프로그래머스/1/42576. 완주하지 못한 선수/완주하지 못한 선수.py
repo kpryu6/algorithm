@@ -1,15 +1,19 @@
 '''
-한명빼고 모두 완주
-participant - completion
+1명 빼고 완주
 
-Counter로 세어보자
+그 1명 return
 '''
-
 def solution(participant, completion):
-    from collections import Counter
-    p = Counter(participant)
-    c = Counter(completion)
-    a = list(p - c)
     
-    return a[0]
+    temp = 0
+    dict = {}
     
+    for p in participant:
+        # p를 출력해야 하니깐 hash를 키로
+        dict[hash(p)] = p
+        temp += hash(p)
+    
+    for c in completion:
+        temp -= hash(c)
+    
+    return dict[temp]
