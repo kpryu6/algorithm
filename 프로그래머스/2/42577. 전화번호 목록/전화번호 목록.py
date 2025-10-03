@@ -1,13 +1,14 @@
 '''
-비교를 어떤 방식으로 할 것인가
-
+1개라도 접두어면 retuh
 '''
+
 def solution(phone_book):
-    phone_book.sort()
+    answer = True
     
-    for a,b in zip(phone_book, phone_book[1:]):
-        if b.startswith(a):
-            return False
+    p = sorted(phone_book)
+
+    for a,b in zip(p, p[1:]):
+        if a == b[:len(a)]:
+            answer = False
         
-    return True
-        
+    return answer
